@@ -19,4 +19,4 @@ X = 7276
 Y = 3225
 
 if BEARER_TOKEN == "":
-    print("APIトークンがセットされていません")
+    print("API Token need to be specified")
