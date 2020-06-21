@@ -4,7 +4,7 @@
 import json, requests, time
 from skimage import io
 
-TOKEN = "f723a922-6264-4645-aa4c-1f920e405125"
+TOKEN = "YOUR TOKEN HERE"
 
 # 任意の最小緯度・経度、最大緯度・経度を入力します
 min_lat = 32.4440
