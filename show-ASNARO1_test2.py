@@ -22,3 +22,36 @@ headers = {
 }
 
 r = requests.get(url, headers=headers)
+
+# Check the URL and Http request status
+print("URL:", r.url)
+print("Status: ", r.status_code)
+
+print(r.json())
+
+#シーン情報を変数に格納
+scenes = r.json() 
+
+#scenesに含まれる最後のメタ情報からサムネイル画像URLを取得
+img1 = scenes[-1]['thumbs_url'] 
+
+img_thumbs1 = io.imread(scenes[-1]['thumbs_url'])
+io.imshow(img_thumbs1)
+
+img_thumbs = io.imread(scenes[1]['thumbs_url'])
+io.imshow(img_thumbs)
+
+img_thumbs = io.imread(scenes[2]['thumbs_url'])
+io.imshow(img_thumbs)
+
+img_thumbs = io.imread(scenes[3]['thumbs_url'])
+io.imshow(img_thumbs)
+
+img_thumbs = io.imread(scenes[4]['thumbs_url'])
+io.imshow(img_thumbs)
+
+img_thumbs = io.imread(scenes[5]['thumbs_url'])
+io.imshow(img_thumbs)
+
+img_thumbs = io.imread(scenes[0]['thumbs_url'])
+io.imshow(img_thumbs)
