@@ -44,7 +44,23 @@ scenes = get_ASNARO_scene(20.425278, 122.933611, 45.557222, 153.986389)
 number_scenes = len(scenes)
 print ("Number of scenes: ", number_scenes)
 
-# Function to get content from scenes index
+# Function to get content info from scenes index
+def get_scene_info(_imgIndex, _scenes):
+    acquisitionDate = _scenes[_imgIndex]['acquisitionDate']
+    cloudCover = _scenes[_imgIndex]['cloudCover']
+    entityId = _scenes[_imgIndex]['entityId']
+    productId = _scenes[_imgIndex]['productId']
+    thumbs_url = _scenes[_imgIndex]['thumbs_url']
+    img_thumbs = io.imread(thumbs_url)
+    print('imageIndex \t: ', imgIndex)
+    print('imageDate \t: ', acquisitionDate)
+    print('cloudCover \t: ',cloudCover)
+    print('entityId \t: ',entityId)
+    print('productId \t: ',productId)
+    print('thumbs_url \t: ',thumbs_url)
+
+
+# Function to get content from scenes index and display the image
 def get_scene(_imgIndex, _scenes):
     acquisitionDate = _scenes[_imgIndex]['acquisitionDate']
     cloudCover = _scenes[_imgIndex]['cloudCover']
@@ -94,14 +110,6 @@ def get_tile_num(lat_deg, lon_deg, zoom):
     ytile = int((1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0 * n)
     return (xtile, ytile)
 
-
-# Define scene index and zoom
-imgIndex = 1
-zoom = 10
-# Call function to get tile coordinate from specific index
-(xtile, ytile) = get_tile_num(scenes[imgIndex]['clat'], scenes[imgIndex]['clon'], zoom)
-print(xtile, ytile)
-
 def get_ASNARO_image(scene_id, zoom, xtile, ytile):
     url = " https://gisapi.tellusxdp.com/ASNARO-1/{}/{}/{}/{}.png".format(scene_id, zoom, xtile, ytile)
     headers = {
@@ -112,15 +120,22 @@ def get_ASNARO_image(scene_id, zoom, xtile, ytile):
     
     # Check request URL 
     check_URL(r)
-    print(r.content)
-    #return io.imread(BytesIO(r.content))
+    #print(r.content)
+    return io.imread(BytesIO(r.content))
 
+# Define scene index and zoom
+imgIndex = 1
+zoom = 11
 
-#imgIndex = 0
-#imgIndex = -1
-#get_scene(imgIndex, scenes)
+# Call function to get tile coordinate from specific index
+(xtile, ytile) = get_tile_num(scenes[imgIndex]['clat'], scenes[imgIndex]['clon'], zoom)
+print("x:",xtile,"y:",ytile,"zoom:",zoom)
 
-#print(scene[0]['entityId'])
-img = get_ASNARO_image(scenes[-1]['entityId'], zoom, xtile, ytile)
+# Get content at specific index
+get_scene_info(imgIndex, scenes)
 
-#io.imshow(img)
+# Get optical image (ASNARO-1) by specifying the point of x, y, z
+img = get_ASNARO_image(scenes[imgIndex]['entityId'], zoom, xtile, ytile)
+
+# Show image
+io.imshow(img)
