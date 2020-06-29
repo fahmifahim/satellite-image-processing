@@ -96,3 +96,22 @@ def get_ASNARO_image(scene_id, zoom, xtile, ytile):
         return io.imread(BytesIO(r.content))
     #print(r.content)    
     #return io.imread(BytesIO(r.content))
+def print_image(_number_scenes,_zoom):
+    for imgIndex in range(_number_scenes):
+        (xtile, ytile) = get_tile_num(scenes[imgIndex]['clat'], scenes[imgIndex]['clon'], _zoom)
+        print("X:",xtile," Y:",ytile," ZOOM:",_zoom)
+        get_scene_info(imgIndex, scenes)
+        img = get_ASNARO_image(scenes[imgIndex]['entityId'], _zoom, xtile, ytile)
+        print(img.shape)
+        plt.imshow(img)
+        plt.show()
+
+
+scenes = get_ASNARO_scene(35, 138.7649361, 36, 140.7649361)
+number_scenes = len(scenes)
+#zoom = 11
+
+# Print all images in for specified Zoom range
+for zoom in range (14,15):
+    print_image(number_scenes,zoom)
+    
