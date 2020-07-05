@@ -7,7 +7,7 @@ import numpy as np
 import dateutil.parser
 import matplotlib.pyplot as plt
 
-TOKEN = "f723a922-6264-4645-aa4c-1f920e405125"
+TOKEN = "YOUR TOKEN HERE"
 
 # Get TSUBAME scene
 def get_tsubame_scene(min_lat, min_lon, max_lat, max_lon):
