@@ -3,12 +3,16 @@
 # ASNARO-1 API: https://www.tellusxdp.com/market/api_reference/414
 
 import os, json, requests, math
+import dateutil.parser
+import numpy as np
+import matplotlib.pyplot as plt
 from skimage import io
 from io import BytesIO
-import matplotlib.pyplot as plt
+from datetime import datetime
+from datetime import timezone
 
 
-TOKEN = "YOUR TOKEN HERE"
+TOKEN = "your token here"
 
 # Function to check the URL and Http request status
 def check_URL(reqURL):
@@ -85,6 +89,7 @@ def get_scene(_imgIndex, _scenes):
     
 # Function to get tile coordinate
 # Tile: https://maps.gsi.go.jp/development/tileCoordCheck.html#5/35.362/138.731
+# https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
 def get_tile_num(lat_deg, lon_deg, zoom):
     # https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Python
     lat_rad = math.radians(lat_deg)
