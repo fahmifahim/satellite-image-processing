@@ -7,7 +7,7 @@ import numpy as np
 import dateutil.parser
 import matplotlib.pyplot as plt
 
-TOKEN = "YOUR TOKEN HERE"
+TOKEN = "your token here"
 
 # Get TSUBAME scene
 def get_tsubame_scene(min_lat, min_lon, max_lat, max_lon):
@@ -28,7 +28,12 @@ def get_tsubame_image(scene_id, zoom, xtile, ytile):
         "Authorization": "Bearer " + TOKEN
     }
     r = requests.get(url, headers=headers)
-    return io.imread(BytesIO(r.content))
+    # Check request URL 
+    if check_URL(r):
+        image = io.imread(BytesIO(r.content))
+        return image
+    #image = io.imread(BytesIO(r.content))
+    #return image
 
 # Get TSUBAME image in series format
 def get_tsubame_series_image(scene_id, zoom, topleft_x, topleft_y, size_x=1, size_y=1):
