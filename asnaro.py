@@ -14,19 +14,6 @@ from datetime import timezone
 
 TOKEN = "your token here"
 
-# Function to check the URL and Http request status
-def check_URL(reqURL):
-    if ((reqURL.status_code == 200)):
-        print("URL:", reqURL.url)
-        print("Status: ", reqURL.status_code, "OK")
-        return True
-    elif (reqURL.status_code == 404):
-        #print("Status: ", reqURL.status_code, "Not Found")
-        return False
-    else:
-        #print("Status: ", reqURL.status_code, "ERROR: Check your parameter!!")
-        return False
-
 # Function to get scenes from ASNARO-1 satellite at specific latitude and longitude
 def get_ASNARO_scene(min_lat, min_lon, max_lat, max_lon):
     url = "https://gisapi.tellusxdp.com/api/v1/asnaro1/scene" \
@@ -53,6 +40,27 @@ def get_ASNARO_image(scene_id, zoom, xtile, ytile):
         return io.imread(BytesIO(r.content))
     #print(r.content)    
     #return io.imread(BytesIO(r.content))
+
+# Function to check the URL and Http request status
+def check_URL(reqURL):
+    if ((reqURL.status_code == 200)):
+        print("URL:", reqURL.url)
+        print("Status: ", reqURL.status_code, "OK")
+        return True
+    elif (reqURL.status_code == 404):
+        #print("Status: ", reqURL.status_code, "Not Found")
+        return False
+    else:
+        #print("Status: ", reqURL.status_code, "ERROR: Check your parameter!!")
+        return False
+
+# Filter scenes in order 
+def filter_by_date(scenes, start_date=None, end_date=None):
+    if(start_date == None):
+        start_date = datetime(1900,1,1, tzinfo=timezone.utc)
+    if(end_date == None):
+        end_date = datetime.now(timezone.utc)
+    return [scene for scene in scenes if start_date <= dateutil.parser.parse(scene["acquisitionDate"]) and dateutil.parser.parse(scene["acquisitionDate"]) < end_date]
 
 # Function to get content info from scenes index
 def get_scene_info(_imgIndex, _scenes):
