@@ -80,7 +80,7 @@ def filter_by_date(scenes, start_date=None, end_date=None):
         end_date = datetime.now(timezone.utc)
     return [scene for scene in scenes if start_date <= dateutil.parser.parse(scene["acquisitionDate"]) and dateutil.parser.parse(scene["acquisitionDate"]) < end_date]
 
-# Classify areas
+# Classify areas 
 def classify(areas, scenes):
     result = [[] for i in range(len(areas))]
     for scene in scenes:
