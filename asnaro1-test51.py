@@ -132,3 +132,18 @@ def make_grid_image(images, col):
 imgs = [get_ASNARO_series_image(scene["entityId"], zoom, topleft_x, topleft_y, size_x, size_y) for scene in kokkai_scenes]
 plt.rcParams["figure.figsize"] = (12, 12)
 io.imshow(make_grid_image(imgs, 4))
+
+# debug. Find xtile and ytile for specified zoom
+(xtile, ytile) = get_tile_num(35.675888, 139.7426693, zoom)
+print(xtile, ytile)
+
+# Zoom = 18 で表示できるxtileとytileを調べる
+
+number_scenes = len(kokkai_scenes)
+print(number_scenes)
+# Print all images in specified Zoom range
+for zoom in range (18,19):
+    print_image(kokkai_scenes,number_scenes,zoom)
+    
+#X: 232836  Y: 103230  ZOOM: 18
+#imageIndex 	:  8
