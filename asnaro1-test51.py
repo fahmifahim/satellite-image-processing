@@ -78,14 +78,14 @@ for scene in kokkai_scenes:
 #xtile=232839 #東京駅周辺x-18
 #ytile=103225 #東京駅周辺y-18
 
-zoom=18
-imgIndex=8
-xtile=232836 #国会議事堂 周辺？
-ytile=103230 #国会議事堂 周辺？
-
 #zoom=18
-#xtile=232829 #国会議事堂x-18
-#ytile=103231 #国会議事堂y-18
+#imgIndex=8
+#xtile=232836 #国会議事堂 周辺？
+#ytile=103230 #国会議事堂 周辺？
+
+zoom=18
+xtile=232830 #国会議事堂x-18
+ytile=103230 #国会議事堂y-18
 
 #zoom=17 
 #xtile=116415 #国会議事堂x-17
@@ -106,10 +106,12 @@ def get_ASNARO_series_image(scene_id, zoom, topleft_x, topleft_y, size_x=1, size
 
 zoom = 18
 imgIndex=8
-topleft_x = 232836 #国会議事堂 周辺？
-topleft_y = 103230 #国会議事堂 周辺？
-size_x = 10
-size_y = 10
+topleft_x=232830 #国会議事堂x-18
+topleft_y=103230 #国会議事堂y-18
+#topleft_x = 232829 #国会議事堂 周辺？
+#topleft_y = 103231 #国会議事堂 周辺？
+size_x = 3
+size_y = 3
 asnaro_series_image = get_ASNARO_series_image(kokkai_scenes[imgIndex]["entityId"], zoom, topleft_x, topleft_y, size_x, size_y)
 io.imshow(asnaro_series_image)
 
@@ -128,21 +130,5 @@ def make_grid_image(images, col):
     return np.vstack(img)
 
 imgs = [get_ASNARO_series_image(scene["entityId"], zoom, topleft_x, topleft_y, size_x, size_y) for scene in kokkai_scenes]
-plt.rcParams["figure.figsize"] = (20, 20)
-io.imshow(make_grid_image(imgs, 5))
-
-
-# debug. Find xtile and ytile for specified zoom
-(xtile, ytile) = get_tile_num(35.675888, 139.7426693, zoom)
-print(xtile, ytile)
-
-# Zoom = 18 で表示できるxtileとytileを調べる
-
-number_scenes = len(kokkai_scenes)
-print(number_scenes)
-# Print all images in specified Zoom range
-for zoom in range (18,19):
-    print_image(kokkai_scenes,number_scenes,zoom)
-    
-#X: 232836  Y: 103230  ZOOM: 18
-#imageIndex 	:  8
+plt.rcParams["figure.figsize"] = (12, 12)
+io.imshow(make_grid_image(imgs, 4))
