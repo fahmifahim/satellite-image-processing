@@ -289,3 +289,24 @@ show(msk.read([1,2,3]))
 plt.show
 # The result will be displayed in 16 bit image
 # You need to adjust the histogram to make it visible by human (or, convert it to jpeg format)
+
+# ローカル環境でも表示しやすいjpg形式にファイルを変換してみましょう。
+# jpgに変換すると勝手にヒストグラムが調整される…？
+
+from osgeo import gdal
+
+scale = '-scale 0 250 0 30'
+options_list = [
+    '-ot Byte',
+    '-of JPEG',
+    scale
+] 
+options_string = " ".join(options_list)
+
+gdal.Translate('Masked_' +str(object_name) +'.jpg',
+               'Masked_' +str(object_name) +'.tif',
+               options=options_string)
+
+from PIL import Image
+im = Image.open('Masked_' +str(object_name) +'.jpg')
+im
