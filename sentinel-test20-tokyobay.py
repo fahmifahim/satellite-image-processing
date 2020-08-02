@@ -136,3 +136,94 @@ product_title = products_gdf_sorted.iloc[0]["title"]
 
 # Download image from the first sorted query
 api.download(uuid)
+
+# Extract the downloaded zip files
+file_name = str(product_title) +'.zip'
+
+with zipfile.ZipFile(file_name) as zf:
+ zf.extractall()
+
+ # Path to image files
+path = str(product_title) + '.SAFE/GRANULE'
+files = os.listdir(path)
+print("path = ", path)
+print("files = ", files)
+
+pathA = str(product_title) + '.SAFE/GRANULE/' + str(files[0])
+files2 = os.listdir(pathA)
+print("pathA = ", pathA)
+print("files2 = ", files2)
+
+pathB = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m'
+files3 = os.listdir(pathB)
+print("pathB = ", pathB)
+print("files3 = ", files3)
+
+# Data tree
+#S2B_MSIL2A_20200726T012659_N0214_R074_T54SUE_20200726T042423.SAFE
+#├── AUX_DATA
+#├── DATASTRIP
+#│   └── DS_EPAE_20200726T042423_S20200726T012657
+#│       ├── MTD_DS.xml
+#│       └── QI_DATA
+#│           ├── FORMAT_CORRECTNESS.xml
+#│           ├── GENERAL_QUALITY.xml
+#│           ├── GEOMETRIC_QUALITY.xml
+#│           ├── RADIOMETRIC_QUALITY.xml
+#│           └── SENSOR_QUALITY.xml
+#├── GRANULE
+#│   └── L2A_T54SUE_A017689_20200726T012657
+#│       ├── AUX_DATA
+#│       │   └── AUX_ECMWFT
+#│       ├── IMG_DATA
+#│       │   ├── R10m
+#│       │   │   ├── T54SUE_20200726T012659_AOT_10m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B02_10m.jp2  # Band2(Red)
+#│       │   │   ├── T54SUE_20200726T012659_B03_10m.jp2  # Band3(Green)
+#│       │   │   ├── T54SUE_20200726T012659_B04_10m.jp2  # Band4(Blue)
+#│       │   │   ├── T54SUE_20200726T012659_B08_10m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_TCI_10m.jp2
+#│       │   │   └── T54SUE_20200726T012659_WVP_10m.jp2
+#│       │   ├── R20m
+#│       │   │   ├── T54SUE_20200726T012659_AOT_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B02_20m.jp2  # Band2(Red)
+#│       │   │   ├── T54SUE_20200726T012659_B03_20m.jp2  # Band3(Green)
+#│       │   │   ├── T54SUE_20200726T012659_B04_20m.jp2  # Band4(Blue)
+#│       │   │   ├── T54SUE_20200726T012659_B05_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B06_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B07_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B11_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B12_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_B8A_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_SCL_20m.jp2
+#│       │   │   ├── T54SUE_20200726T012659_TCI_20m.jp2
+#│       │   │   └── T54SUE_20200726T012659_WVP_20m.jp2
+#│       │   └── R60m
+#│       │       ├── T54SUE_20200726T012659_AOT_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B01_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B02_60m.jp2  # Band2(Red)
+#│       │       ├── T54SUE_20200726T012659_B03_60m.jp2  # Band3(Green)
+#│       │       ├── T54SUE_20200726T012659_B04_60m.jp2  # Band4(Blue)
+#│       │       ├── T54SUE_20200726T012659_B05_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B06_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B07_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B09_60m.jp2
+#│       │       ├── T54SUE_20200726T012659_B11_60m.jp2
+#│       │       └── T54SUE_20200726T012659_WVP_60m.jp2
+#│       ├── MTD_TL.xml
+#│       └── QI_DATA
+#│
+#├── HTML
+#│   ├── UserProduct_index.html
+#│   ├── UserProduct_index.xsl
+#│   ├── banner_1.png
+#│   ├── banner_2.png
+#│   ├── banner_3.png
+#│   └── star_bg.jpg
+#├── INSPIRE.xml
+#├── MTD_MSIL2A.xml
+#├── manifest.safe
+#└── rep_info
+#    ├── S2_PDI_Level-2A_Datastrip_Metadata.xsd
+#    ├── S2_PDI_Level-2A_Tile_Metadata.xsd
+#    └── S2_User_Product_Level-2A_Metadata.xsd
