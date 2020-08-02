@@ -227,3 +227,65 @@ print("files3 = ", files3)
 #    ├── S2_PDI_Level-2A_Datastrip_Metadata.xsd
 #    ├── S2_PDI_Level-2A_Tile_Metadata.xsd
 #    └── S2_User_Product_Level-2A_Metadata.xsd
+
+
+# Open Bands 4(Blue), 3(Green) and 2(Red) with Rasterio(rio)
+# We are using the 10m resolutions
+path_b2 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B02_10m.jp2')
+path_b3 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B03_10m.jp2')
+path_b4 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B04_10m.jp2')
+
+b4 = rio.open(path_b4)
+b3 = rio.open(path_b3)
+b2 = rio.open(path_b2)
+
+
+# Observe the Band 4 CRS (Coordinate Reference System)
+b4.count, b4.width, b4.height
+
+# Reference https://rasterio.readthedocs.io/en/latest/api/rasterio.crs.html#module-rasterio.crs
+b4.crs
+
+# EPSGの326544というのは、地図投影する際によく利用される、WGS84のUTM座標系のことを表します。
+
+fig, ax = plt.subplots(1, figsize=(20, 20))
+show(b4, ax=ax)
+plt.show()
+
+# バンドを合成してTrue ColorのRGB画像を表示
+# Sentinel-2の１シーン画像として .tiff ファイルが出力される
+with rio.open(str(object_name) +'.tiff','w',driver='Gtiff', width=b4.width, height=b4.height, 
+              count=3,crs=b4.crs,transform=b4.transform, dtype=b4.dtypes[0]) as rgb:
+    rgb.write(b2.read(1),3) 
+    rgb.write(b3.read(1),2) 
+    rgb.write(b4.read(1),1) 
+    rgb.close()
+
+RGB_tokyo =rio.open(str(object_name) +'.tiff')
+RGB_tokyo.crs
+
+nReserve_geo = gpd.read_file(str(object_name) +'.geojson')
+epsg = b4.crs
+
+# 関心領域のみを抽出して、表示する
+# Since this RGB image is large and huge you save both computing power and time to clip and use only the area of interest. 
+# We will clip the Natural reserve area from the RGB image.
+nReserve_proj = nReserve_geo.to_crs({'init': epsg})
+
+with rio.open(str(object_name) +'.tiff') as src:
+    out_image, out_transform = rio.mask.mask(src, nReserve_proj.geometry,crop=True)
+    out_meta = src.meta.copy()
+    out_meta.update({"driver": "GTiff",
+                 "height": out_image.shape[1],
+                 "width": out_image.shape[2],
+                 "transform": out_transform})
+    
+with rasterio.open('Masked_' +str(object_name) +'.tif', "w", **out_meta) as dest:
+    dest.write(out_image)
+
+msk = rio.open(r'Masked_' +str(object_name) +'.tif')
+fig, ax = plt.subplots(1, figsize=(18, 18))
+show(msk.read([1,2,3]))
+plt.show
+# The result will be displayed in 16 bit image
+# You need to adjust the histogram to make it visible by human (or, convert it to jpeg format)
