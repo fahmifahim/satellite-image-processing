@@ -2,4 +2,5 @@
 - Tellus 
 - Sentinel-2
 
-images/Masked_Tokyo_Bay.jpg
+
+![sample image from Sentinel-2](images/Masked_Tokyo_Bay.jpg "Tokyo Bay from Sentinel-2")
