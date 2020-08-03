@@ -346,3 +346,41 @@ Begin_date = '20200501'
 End_date1 = Begin_date[:6] +'30'#月の終わりを２８としているのは，２月を考慮
 
 Sentinel2_get_init(0)
+
+placenumber = '_T54SUE_' #上記で取得したplacenumberを貼り付けます
+
+#L2Aデータ取得の場合は、2019年1月以降を開始日とすること
+Begin_date = '20190701'
+End_date = '20200731'
+
+#年をまたぐ画像を取得する場合のため、以下のコードにて月数をカウントする
+d_year = int(End_date[2:4]) - int(Begin_date[2:4])
+d_year = d_year*12 + int(End_date[4:6]) - int(Begin_date[4:6])
+
+# 各月の衛星画像の取得し、関心領域のjpeg画像を作成
+for i in range(d_year):
+    if i < 1:
+        m = int(Begin_date[4:6])
+    else:
+        m = int(Begin_date[4:6]) +1
+
+    if m <10:
+        Begin_date = Begin_date[:4] +'0'+ str(m) + Begin_date[6:]
+    elif m <13:
+        Begin_date = Begin_date[:4] + str(m) + Begin_date[6:]
+    else:
+        y = int(Begin_date[2:4]) +1
+        Begin_date = Begin_date[:2] + str(y) + '01' + Begin_date[6:]
+    End_date = Begin_date[:6] +'28'
+    
+    Sentinel2_get()
+
+
+# 作成したjpeg画像を、古い観測画像よりGIFアニメーションにする
+
+images =[]
+
+files = sorted(glob.glob('./Image_jpeg_'+str(object_name) +'/*.jpg'))
+images = list(map(lambda file: Image.open(file), files))
+
+images[0].save('./Image_jpeg_'+str(object_name) +'/' + str(object_name) + '.gif', save_all=True, append_images=images[1:], duration=1000, loop=0)
