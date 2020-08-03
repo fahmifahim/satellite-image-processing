@@ -4,4 +4,6 @@
     - [sample-sentinel-test20-tokyobay.py](https://github.com/fahmifahim/satellite-image-processing/blob/master/sentinel-test20-tokyobay.py)
     ![sample image from Sentinel-2](images/Masked_Tokyo_Bay.jpg "Tokyo Bay from Sentinel-2")
     - [sample-sentinel-test30-timelapse.py](https://github.com/fahmifahim/satellite-image-processing/blob/master/sentinel-test30-timelapse.py)
-    ![timelapse image from Sentinel-2](https://fahmifahim.files.wordpress.com/2020/08/sentinel-test30-timelapse-tokyobay-1.gif "Tokyo Bay TimeLapse from Sentinel-2")
+    ![timelapse image from Sentinel-2](https://fahmifahim.files.wordpress.com/2020/08/sentinel-test30-timelapse-tokyobay-1.gif)
+
+    - ![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
