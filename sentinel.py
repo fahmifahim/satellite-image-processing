@@ -32,7 +32,7 @@ password = 'password'
 api = SentinelAPI(user, password, 'https://scihub.copernicus.eu/dhus')
 
 
-
+## Get Sentinel satellite scene
 def Sentinel2_get_init(i):
     products = api.query(footprint_geojson,
                      date = (Begin_date, End_date1), #画像取得月の画像取得
