@@ -144,14 +144,13 @@ def Sentinel2_get_init(i):
                    options=options_string)
     
     
-    #Open image
+    #Print the date on the image
     img = Image.open('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg')
-
     #print(img.size)
     #print(img.size[0])
-    x = img.size[0]/100 #日付の記載位置の設定
-    y = img.size[1]/100 #日付の記載位置の設定
-    fs = img.size[0]/50 #日付のフォントサイズの設定
+    x = img.size[0]/100 #x coordinate for the print position
+    y = img.size[1]/100 #y coordinate for the print position
+    fs = img.size[0]/50 #font size
     fs1 = int(fs)
     #print(fs1)
     #print(type(fs1))
@@ -163,7 +162,7 @@ def Sentinel2_get_init(i):
 
     img.save('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg')
     
-    #大容量のダウンロードファイル，および解凍フォルダの削除
+    #Remove downloaded files
     print("Removing files...")
     shutil.rmtree( str(product_title) + '.SAFE')
     os.remove(str(product_title) +'.zip')
