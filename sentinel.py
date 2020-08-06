@@ -35,14 +35,15 @@ api = SentinelAPI(user, password, 'https://scihub.copernicus.eu/dhus')
 ## Get Sentinel satellite scene
 def Sentinel2_get_init(i):
     products = api.query(footprint_geojson,
-                     date = (Begin_date, End_date1), #画像取得月の画像取得
+                     date = (Begin_date, End_date1), #Desired date for the beginning and ending time of Sentinel-2 image
                      platformname = 'Sentinel-2',
-                     processinglevel = 'Level-2A', #Leve-1C
-                     cloudcoverpercentage = (0,100)) #被雲率（0%〜50%）
+                     processinglevel = 'Level-2A',
+                     cloudcoverpercentage = (0,100)) 
     
     products_gdf = api.to_geodataframe(products)
     
-    #画像取得月の被雲率の小さい画像からソートする．
+    
+    #Sort the value of cloud coverage percentage from the small one
     products_gdf_sorted = products_gdf.sort_values(['cloudcoverpercentage'], ascending=[True])
     title = products_gdf_sorted.iloc[i]["title"]
     print(str(title))
