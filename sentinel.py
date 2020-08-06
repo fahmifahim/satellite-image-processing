@@ -51,22 +51,22 @@ def Sentinel2_get_init(i):
     uuid = products_gdf_sorted.iloc[i]["uuid"]
     product_title = products_gdf_sorted.iloc[i]["title"]
     
-    #画像の観測日を確認．
+    #Check the date of the first element of the sorted scenes
     date = products_gdf_sorted.iloc[i]["ingestiondate"].strftime('%Y-%m-%d')
     print(date)
     
-    #Sentinel-2 data download
+    #Download Sentinel-2 data 
     api.download(uuid)
     file_name = str(product_title) +'.zip'
     print("file_name = ", file_name)
     
     
-    #ダウロードファイルの解凍．
+    #Extract downloaded Sentinel-2 data
     print("Extracting zip file...")
     with zipfile.ZipFile(file_name) as zf:
         zf.extractall()
     
-    #フォルダの画像ファイルのアドレスを取得．
+    #Get image's folder path 
     path = str(product_title) + '.SAFE/GRANULE'
     files = os.listdir(path)
     pathA = str(product_title) + '.SAFE/GRANULE/' + str(files[0])
@@ -80,12 +80,12 @@ def Sentinel2_get_init(i):
     path_b3 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B03_10m.jp2')
     path_b4 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B04_10m.jp2')
     
-    # Band４，３，２をR,G,Bとして開く．
+    #Open Band4(Blue), 3(Green) and 2(Red)
     b4 = rio.open(path_b4)
     b3 = rio.open(path_b3)
     b2 = rio.open(path_b2)
     
-    #RGBカラー合成（GeoTiffファイルの出力）
+    #RGB color compose (output file as GeoTiff: public domain metadata standard which allows georeferencing information to be embedded within a TIFF file) 
     print("RGB Color composing...")
     with rio.open(str(object_name) +'.tiff','w',driver='Gtiff', width=b4.width, height=b4.height, 
               count=3,crs=b4.crs,transform=b4.transform, dtype=b4.dtypes[0]) as rgb:
@@ -94,19 +94,22 @@ def Sentinel2_get_init(i):
         rgb.write(b2.read(1),3) 
         rgb.close()
     
-    #ポリゴン情報の取得．
+    #Read polygon from .geojson
     nReserve_geo = gpd.read_file(str(object_name) +'.geojson')
     
-    #取得画像のEPSGを取得
+    # Reference https://rasterio.readthedocs.io/en/latest/api/rasterio.crs.html#module-rasterio.crs
+    # EPSGの326544というのは、地図投影する際によく利用される、WGS84のUTM座標系のことを表します。
     epsg = b4.crs
     
+    # Since this RGB image is large and huge you save both computing power and time to clip and use only the area of interest. 
+    # We will clip the Natural reserve area from the RGB image.
     nReserve_proj = nReserve_geo.to_crs({'init': str(epsg)})
     
-    #マスクTiffファイルの一時置き場
+    #Create directory for temporary Masked Tiff
     print("Creating directory Image_tiff...")
     os.makedirs('./Image_tiff', exist_ok=True)
 
-    #カラー合成画像より関心域を抽出．
+    #Extract image for Area of Interest from the composed color image
     print("Calculating area of interest...")
     with rio.open(str(object_name) +'.tiff') as src:
         out_image, out_transform = rio.mask.mask(src, nReserve_proj.geometry,crop=True)
@@ -119,7 +122,7 @@ def Sentinel2_get_init(i):
     with rasterio.open('./Image_tiff/' +'Masked_' +str(object_name) +'.tif', "w", **out_meta) as dest:
         dest.write(out_image)
     
-    #抽出画像のjpeg処理．
+    #jpeg processing from the extracted images
     scale = '-scale 0 250 0 30'
     options_list = [
         '-ot Byte',
@@ -129,16 +132,19 @@ def Sentinel2_get_init(i):
     
     options_string = " ".join(options_list)
     
-    #ディレクトリの作成 
+    #Create directory for jpeg processed image 
     print("Creating Image_jpeg...")
     os.makedirs('./Image_jpeg_'+str(object_name), exist_ok=True)
     
-    #jpeg画像の保存．
+    #Save jpeg image
+    #https://pypi.org/project/GDAL/
+    #GDAL Geospatial Data Abstraction Library
     gdal.Translate('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg',
                    './Image_tiff/Masked_' +str(object_name) +'.tif',
                    options=options_string)
     
-    #画像への撮像日を記載
+    
+    #Open image
     img = Image.open('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg')
 
     #print(img.size)
