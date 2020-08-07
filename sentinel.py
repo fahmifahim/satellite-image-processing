@@ -46,8 +46,19 @@ password = 'password'
 api = SentinelAPI(user, password, 'https://scihub.copernicus.eu/dhus')
 
 
+def sentinel2_hello():
+    print("Hello from Sentinel2")
+    
+
+# Convert the Polygon data to GeoJSON format
+def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
+    print("Converting polygon to GeoJSON...")
+    with open(object_name +'.geojson', 'w') as f:
+        json.dump(polygon_object, f)
+        print(object_name +".geojson created")
+
 ## Get Sentinel satellite scene
-def Sentinel2_get_init(i):
+def Sentinel2_get_sorted_data(i):
     products = api.query(footprint_geojson,
                      date = (Begin_date, End_date1), #Desired date for the beginning and ending time of Sentinel-2 image
                      platformname = 'Sentinel-2',
