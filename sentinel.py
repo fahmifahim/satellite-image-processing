@@ -58,9 +58,9 @@ def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
         print(object_name +".geojson created")
 
 ## Get Sentinel satellite scene
-def Sentinel2_get_sorted_data(i):
+def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start_date, end_date):
     products = api.query(footprint_geojson,
-                     date = (Begin_date, End_date1), #Desired date for the beginning and ending time of Sentinel-2 image
+                     date = (start_date, end_date), #Desired date for the beginning and ending time of Sentinel-2 image
                      platformname = 'Sentinel-2',
                      processinglevel = 'Level-2A',
                      cloudcoverpercentage = (0,100)) 
@@ -112,7 +112,7 @@ def Sentinel2_get_sorted_data(i):
     
     #RGB color compose (output file as GeoTiff: public domain metadata standard which allows georeferencing information to be embedded within a TIFF file) 
     print("RGB Color composing...")
-    with rio.open(str(object_name) +'.tiff','w',driver='Gtiff', width=b4.width, height=b4.height, 
+    with rio.open(object_name +'.tiff','w',driver='Gtiff', width=b4.width, height=b4.height, 
               count=3,crs=b4.crs,transform=b4.transform, dtype=b4.dtypes[0]) as rgb:
         rgb.write(b4.read(1),1) 
         rgb.write(b3.read(1),2) 
@@ -120,7 +120,7 @@ def Sentinel2_get_sorted_data(i):
         rgb.close()
     
     #Read polygon from .geojson
-    nReserve_geo = gpd.read_file(str(object_name) +'.geojson')
+    nReserve_geo = gpd.read_file(object_name +'.geojson')
     
     # Reference https://rasterio.readthedocs.io/en/latest/api/rasterio.crs.html#module-rasterio.crs
     # EPSGの326544というのは、地図投影する際によく利用される、WGS84のUTM座標系のことを表します。
@@ -136,7 +136,7 @@ def Sentinel2_get_sorted_data(i):
 
     #Extract image for Area of Interest from the composed color image
     print("Calculating area of interest...")
-    with rio.open(str(object_name) +'.tiff') as src:
+    with rio.open(object_name +'.tiff') as src:
         out_image, out_transform = rio.mask.mask(src, nReserve_proj.geometry,crop=True)
         out_meta = src.meta.copy()
         out_meta.update({"driver": "GTiff",
@@ -144,7 +144,7 @@ def Sentinel2_get_sorted_data(i):
                      "width": out_image.shape[2],
                      "transform": out_transform})
     
-    with rasterio.open('./Image_tiff/' +'Masked_' +str(object_name) +'.tif', "w", **out_meta) as dest:
+    with rasterio.open('./Image_tiff/' +'Masked_' + object_name +'.tif', "w", **out_meta) as dest:
         dest.write(out_image)
     
     #jpeg processing from the extracted images
@@ -159,18 +159,18 @@ def Sentinel2_get_sorted_data(i):
     
     #Create directory for jpeg processed image 
     print("Creating Image_jpeg...")
-    os.makedirs('./Image_jpeg_'+str(object_name), exist_ok=True)
+    os.makedirs('./Image_jpeg_'+object_name, exist_ok=True)
     
     #Save jpeg image
     #https://pypi.org/project/GDAL/
     #GDAL Geospatial Data Abstraction Library
-    gdal.Translate('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg',
-                   './Image_tiff/Masked_' +str(object_name) +'.tif',
+    gdal.Translate('./Image_jpeg_'+object_name +'/' + str(start_date) + 'Masked_' +object_name +'.jpg',
+                   './Image_tiff/Masked_' +object_name +'.tif',
                    options=options_string)
     
     
     #Print the date on the image
-    img = Image.open('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg')
+    img = Image.open('./Image_jpeg_'+object_name +'/' + str(start_date) + 'Masked_' +object_name +'.jpg')
     #print(img.size)
     #print(img.size[0])
     x = img.size[0]/100 #x coordinate for the print position
@@ -185,7 +185,7 @@ def Sentinel2_get_sorted_data(i):
     obj_draw.text((img.size[0]/2, img.size[1]-y - img.size[1]/20 ), 'produced from ESA remote sensing data', fill=(255, 255, 255), font=obj_font)
     
 
-    img.save('./Image_jpeg_'+str(object_name) +'/' + str(Begin_date) + 'Masked_' +str(object_name) +'.jpg')
+    img.save('./Image_jpeg_'+str(object_name) +'/' + str(start_date) + 'Masked_' +object_name +'.jpg')
     
     #Remove downloaded files
     print("Removing files...")
