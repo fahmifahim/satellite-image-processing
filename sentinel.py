@@ -59,6 +59,10 @@ def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
 
 ## Get Sentinel satellite scene
 def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start_date, end_date):
+    print("Start Date: ", start_date)
+    print("End Date: ", end_date)
+    
+    print("Querying Sentinel-2...")
     products = api.query(footprint_geojson,
                      date = (start_date, end_date), #Desired date for the beginning and ending time of Sentinel-2 image
                      platformname = 'Sentinel-2',
@@ -69,17 +73,22 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     
     
     #Sort the value of cloud coverage percentage from the small one
+    print("Sorting data from the lowest Cloud Coverage Percentage...")
     products_gdf_sorted = products_gdf.sort_values(['cloudcoverpercentage'], ascending=[True])
+    print("  Data sorted! Information as follow:")
+
     title = products_gdf_sorted.iloc[i]["title"]
-    print(str(title))
+    print("  Sentinel-2 title: \t", str(title))
     
     uuid = products_gdf_sorted.iloc[i]["uuid"]
     product_title = products_gdf_sorted.iloc[i]["title"]
     
-    #Check the date of the first element of the sorted scenes
     date = products_gdf_sorted.iloc[i]["ingestiondate"].strftime('%Y-%m-%d')
-    print(date)
+    print("  IngestionDate: \t", date)
     
+    cloudcoverpercentage = products_gdf_sorted.iloc[i]["cloudcoverpercentage"]
+    print("  Cloud cover percentage: \t", cloudcoverpercentage)
+
     #Download Sentinel-2 data 
     api.download(uuid)
     file_name = str(product_title) +'.zip'
