@@ -48,6 +48,7 @@ api = SentinelAPI(user, password, 'https://scihub.copernicus.eu/dhus')
 
 def sentinel2_hello():
     print("Hello from Sentinel2")
+    return
     
 
 # Convert the Polygon data to GeoJSON format
@@ -56,9 +57,10 @@ def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
     with open(object_name +'.geojson', 'w') as f:
         json.dump(polygon_object, f)
         print(object_name +".geojson created")
+    return
 
 ## Get Sentinel satellite scene
-def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start_date, end_date):
+def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start_date, end_date, resolution):
     print("Start Date: ", start_date)
     print("End Date: ", end_date)
     
@@ -87,32 +89,41 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     print("  IngestionDate: \t", date)
     
     cloudcoverpercentage = products_gdf_sorted.iloc[i]["cloudcoverpercentage"]
-    print("  Cloud cover percentage: \t", cloudcoverpercentage)
+    print("  Cloud percentage: \t", cloudcoverpercentage)
+
+    datasize = products_gdf_sorted.iloc[i]["size"]
+    print("  Data size: \t", datasize)
 
     #Download Sentinel-2 data 
+    print("  Download data now...")
     api.download(uuid)
     file_name = str(product_title) +'.zip'
-    print("file_name = ", file_name)
+    print("  Successfully downloaded data as: \t", file_name)
     
     
     #Extract downloaded Sentinel-2 data
-    print("Extracting zip file...")
+    print("\nExtracting data.zip file...")
     with zipfile.ZipFile(file_name) as zf:
         zf.extractall()
     
     #Get image's folder path 
+    print("\nFile identification...")
+    print("  Resolution: \t", resolution)
     path = str(product_title) + '.SAFE/GRANULE'
     files = os.listdir(path)
     pathA = str(product_title) + '.SAFE/GRANULE/' + str(files[0])
     files2 = os.listdir(pathA)
-    pathB = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m'
+    pathB = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R' + resolution + 'm'
     files3 = os.listdir(pathB)
     
     
-    print("Resolution 10m files identification...")
-    path_b2 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B02_10m.jp2')
-    path_b3 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B03_10m.jp2')
-    path_b4 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R10m/' +str(files3[0][0:23] +'B04_10m.jp2')
+    path_b2 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R' + resolution + 'm/' +str(files3[0][0:23] +'B02_'+resolution+'m.jp2')
+    path_b3 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R' + resolution + 'm/' +str(files3[0][0:23] +'B03_'+resolution+'m.jp2')
+    path_b4 = str(product_title) + '.SAFE/GRANULE/' + str(files[0]) +'/' + str(files2[1]) +'/R' + resolution + 'm/' +str(files3[0][0:23] +'B04_'+resolution+'m.jp2')
+
+    print("  ", path_b2)
+    print("  ", path_b3)
+    print("  ", path_b4)
     
     #Open Band4(Blue), 3(Green) and 2(Red)
     b4 = rio.open(path_b4)
@@ -120,7 +131,7 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     b2 = rio.open(path_b2)
     
     #RGB color compose (output file as GeoTiff: public domain metadata standard which allows georeferencing information to be embedded within a TIFF file) 
-    print("RGB Color composing...")
+    print("\nRGB Color composing...")
     with rio.open(object_name +'.tiff','w',driver='Gtiff', width=b4.width, height=b4.height, 
               count=3,crs=b4.crs,transform=b4.transform, dtype=b4.dtypes[0]) as rgb:
         rgb.write(b4.read(1),1) 
@@ -144,7 +155,7 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     os.makedirs('./Image_tiff', exist_ok=True)
 
     #Extract image for Area of Interest from the composed color image
-    print("Calculating area of interest...")
+    print("\nCalculating area of interest...")
     with rio.open(object_name +'.tiff') as src:
         out_image, out_transform = rio.mask.mask(src, nReserve_proj.geometry,crop=True)
         out_meta = src.meta.copy()
@@ -197,11 +208,11 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     img.save('./Image_jpeg_'+str(object_name) +'/' + str(start_date) + 'Masked_' +object_name +'.jpg')
     
     #Remove downloaded files
-    print("Removing files...")
+    print("\nRemoving files...")
     shutil.rmtree( str(product_title) + '.SAFE')
     os.remove(str(product_title) +'.zip')
     
-    print("--DONE--")
+    print("--DONE--\n")
     return
 
 def Sentinel2_get():
