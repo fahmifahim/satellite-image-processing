@@ -85,6 +85,7 @@ def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
 
 ## Get Sentinel satellite scene
 def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start_date, end_date, resolution):
+    print("\n---START---")
     print("Start Date: ", start_date)
     print("End Date: ", end_date)
     
@@ -236,7 +237,7 @@ def Sentinel2_get_sorted_data(i, fontfile, object_name, footprint_geojson, start
     shutil.rmtree( str(product_title) + '.SAFE')
     os.remove(str(product_title) +'.zip')
     
-    print("--DONE--\n")
+    print("---DONE---\n")
     return
 
 def Sentinel2_get():
