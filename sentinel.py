@@ -35,6 +35,9 @@ import fiona
 import folium
 import zipfile
 
+from notebook import notebookapp
+import urllib
+import ipykernel
 
 #Generate coordinate of Area of Interest by using tools from Keene University below
 #from IPython.display import HTML
@@ -50,6 +53,27 @@ def sentinel2_hello():
     print("Hello from Sentinel2")
     return
     
+# (JupyterNotebook only) Get notebookpath
+def notebook_path():
+    """Returns the absolute path of the Notebook or None if it cannot be determined
+    NOTE: works only when the security is token-based or there is also no password
+    """
+    connection_file = os.path.basename(ipykernel.get_connection_file())
+    kernel_id = connection_file.split('-', 1)[1].split('.')[0]
+
+    for srv in notebookapp.list_running_servers():
+        try:
+            if srv['token']=='' and not srv['password']:  # No token and no password, ahem...
+                req = urllib.request.urlopen(srv['url']+'api/sessions')
+            else:
+                req = urllib.request.urlopen(srv['url']+'api/sessions?token='+srv['token'])
+            sessions = json.load(req)
+            for sess in sessions:
+                if sess['kernel']['id'] == kernel_id:
+                    return os.path.join(srv['notebook_dir'],sess['notebook']['path'])
+        except:
+            pass  # There may be stale entries in the runtime directory 
+    return None
 
 # Convert the Polygon data to GeoJSON format
 def Sentinel2_convert_polygon_to_json(object_name, polygon_object):
