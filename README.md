@@ -9,4 +9,4 @@
 
     [GIF-IMAGE timelapse image from Sentinel-2](https://fahmifahim.files.wordpress.com/2020/08/sentinel-test30-timelapse-tokyobay-1.gif)
 
-    - [GIF-IMAGE timelapse small](sentinel-test50.gif)
+    - ![GIF-IMAGE timelapse small](sentinel-test50.gif)
