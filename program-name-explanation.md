@@ -29,3 +29,8 @@
         - Create timelapse. Resolution 10, 2019/9 - 2020/7, cloudcover 0-70
         - Get all data between start_date and end_date
         - Sentinel2_get_all_data(products_gdf_sorted, index, fontfile, object_name, start_date, resolution)
+
+    - sentinel-test63-jakarta.ipynb
+        - Create timelapse. Resolution 10, 2019/8 - 2020/8, cloudcover 0-60
+        - Get all data between start_date and end_date
+        - Sentinel2_get_all_data(products_gdf_sorted, index, fontfile, object_name, start_date, resolution)
