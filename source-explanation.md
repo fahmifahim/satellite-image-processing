@@ -1,0 +1,5 @@
+- sentinel-test52-tokyo.ipynb
+    - Create timelapse 
+    - Sort data based on cloudcoverpercentage
+    - Get 1 scene each month
+    - Sentinel2_get_sorted_data() -> Sentinel2_get_all_data()
