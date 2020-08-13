@@ -32,3 +32,69 @@ else:
     print("Font file extracted")
     if os.path.isfile(fontfile):
         print(fontfile)
+
+#Determine your Area of Interest by using the 
+#IMPORTANT: It is currently commented out. Use Polyline Tool from Keene University to find out the area of interest
+#from IPython.display import HTML
+#HTML(r'<iframe width="960" height="480" src="https://www.keene.edu/campus/maps/tool/" frameborder="0"></iframe>')
+
+#Copy paste the area of interest from the Polyline Tool Keene University 
+#Area name = Tokyo 
+AREA = [
+          [
+            -220.291841,
+            35.6593884
+          ],
+          [
+            -220.2932143,
+            35.4817801
+          ],
+          [
+            -220.1380324,
+            35.4817801
+          ],
+          [
+            -220.1421523,
+            35.6493456
+          ],
+          [
+            -220.291841,
+            35.6593884
+          ]
+        ]
+
+#Set the Resolution to display. Choose between 10, 20, or 60
+resolution = "10"
+print("Resolution to retrieve from Sentinel-2 = ", resolution)
+
+
+# Convert coordinate to 360degree format
+for i in range(len(AREA)):
+    AREA[i][0] = AREA[i][0] +360
+
+# Convert coordinate to Polygon format
+m=Polygon([AREA])
+
+#Set the object name for the area of interest
+object_name = str(notebookname)
+
+# Convert the Polygon data to GeoJSON format
+Sentinel2_convert_polygon_to_json(object_name, m)
+
+# Convert a GeoJSON object to Well-Known Text. Intended for use with OpenSearch queries.
+footprint_geojson = geojson_to_wkt(read_geojson(object_name +'.geojson'))
+print(footprint_geojson)
+
+# Create a base map, simply by passing the starting coordinates to Folium
+# In this case get the coordinate from the first and last x,y divided by 2
+x_map = (AREA[0][1]+AREA[len(AREA)-1][1])/2
+y_map = (AREA[0][0]+AREA[len(AREA)-1][0])/2
+xyzoom_start = 11
+
+m = folium.Map([x_map, y_map], zoom_start=xyzoom_start)
+
+# Add the GeoJSON data (coordinate info) to folium
+folium.GeoJson(str(object_name) +'.geojson').add_to(m)
+
+# Display the Folium map on OpenStreetMap
+m
