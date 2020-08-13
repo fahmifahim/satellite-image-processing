@@ -98,3 +98,34 @@ folium.GeoJson(str(object_name) +'.geojson').add_to(m)
 
 # Display the Folium map on OpenStreetMap
 m
+
+#Get the Sentinel-2 L2A products from the specified starting date
+#Specify your desired starting and ending date
+start_date = '20190401'
+end_date = '20200830'
+
+#Define the index. Set as 0 if you want to get the first index
+index = 0
+
+#Count the number of months from different years
+num_months = int(end_date[2:4]) - int(start_date[2:4])
+num_months = num_months*12 + int(end_date[4:6]) - int(start_date[4:6])
+
+#Get one scene each month, and create the jpeg image
+for i in range(num_months):
+    if i < 1:
+        m = int(start_date[4:6])
+    else:
+        m = int(start_date[4:6]) +1
+
+    if m <10:
+        start_date = start_date[:4] +'0'+ str(m) + start_date[6:]
+    elif m <13:
+        start_date = start_date[:4] + str(m) + start_date[6:]
+    else:
+        y = int(start_date[2:4]) +1
+        start_date = start_date[:2] + str(y) + '01' + start_date[6:]
+        
+    end_date = start_date[:6] +'28'
+    # Call the Sentinel function
+    Sentinel2_get_sorted_data(index, fontfile, object_name, footprint_geojson, start_date, end_date, resolution)
