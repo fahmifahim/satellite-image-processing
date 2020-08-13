@@ -122,3 +122,29 @@ for i in range(num_months):
     # Call the Sentinel function
     for index in range(number_scenes):
         Sentinel2_get_all_data(products_gdf, index, fontfile, object_name, start_date, resolution)
+
+# Create a base map, simply by passing the starting coordinates to Folium
+# In this case get the coordinate from the first and last x,y divided by 2
+x_map = (AREA[0][1]+AREA[len(AREA)-1][1])/2
+y_map = (AREA[0][0]+AREA[len(AREA)-1][0])/2
+xyzoom_start = 11
+
+m = folium.Map([x_map, y_map], zoom_start=xyzoom_start)
+
+# Add the GeoJSON data (coordinate info) to folium
+folium.GeoJson(str(object_name) +'.geojson').add_to(m)
+
+# Display the Folium map on OpenStreetMap
+m
+
+# Create GIF animation from jpeg images. Amimation created in the order of time
+images =[]
+
+files = sorted(glob.glob('./Image_jpeg_'+object_name +'/*.jpg'))
+images = list(map(lambda file: Image.open(file), files))
+
+images[0].save('./Image_jpeg_'+object_name +'/' + object_name + '.gif', save_all=True, append_images=images[1:], duration=1000, loop=0)
+
+# Show GIF image
+gif_file = './Image_jpeg_'+object_name +'/' + object_name + '.gif'
+print("Created GIF file = ", gif_file)
