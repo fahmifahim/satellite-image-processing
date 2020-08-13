@@ -129,3 +129,16 @@ for i in range(num_months):
     end_date = start_date[:6] +'28'
     # Call the Sentinel function
     Sentinel2_get_sorted_data(index, fontfile, object_name, footprint_geojson, start_date, end_date, resolution)
+
+
+# Create GIF animation from jpeg images. Amimation created in the order of time
+images =[]
+
+files = sorted(glob.glob('./Image_jpeg_'+object_name +'/*.jpg'))
+images = list(map(lambda file: Image.open(file), files))
+
+images[0].save('./Image_jpeg_'+object_name +'/' + object_name + '.gif', save_all=True, append_images=images[1:], duration=1000, loop=0)
+
+# Show GIF image
+gif_file = './Image_jpeg_'+object_name +'/' + object_name + '.gif'
+print("Created GIF file = ", gif_file)
