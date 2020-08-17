@@ -39,7 +39,7 @@ from IPython.display import HTML
 HTML(r'<iframe width="960" height="480" src="https://www.keene.edu/campus/maps/tool/" frameborder="0"></iframe>')
 
 #Copy paste the area of interest from the Polyline Tool Keene University 
-#Area name = Sabang island
+#Area name = Sabang
 AREA = [
           [
             -264.8015785,
