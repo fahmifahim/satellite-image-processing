@@ -21,7 +21,7 @@ def drop_resolution(x, scale):
     print("----- print x")
     print(x)
     pdb.set_trace()
-    
+
     size = (x.shape[0], x.shape[1])
     print("----- print size:drop_resolution")
     print(size)
@@ -45,14 +45,13 @@ def drop_resolution(x, scale):
     print("----- print small_img.resize")
     print(img_to_array(small_img.resize(img.size,3)))
     pdb.set_trace()
-    
+
     return img_to_array(small_img.resize(img.size, 3))
 
 
 def data_generator(data_dir, mode, scale,
                    target_size=(256, 256),
-                   batch_size=32,
-#                   batch_size=10,
+                   batch_size=2,
                    shuffle=True):
     for imgs in ImageDataGenerator().flow_from_directory(
         directory=data_dir,
@@ -77,12 +76,12 @@ def data_generator(data_dir, mode, scale,
 
 dataset_dir = './Data_ASNARO1_SRCNN/'
 #n_train = 6000
-n_train = 2000
+n_train = 2
 #n_test = 616
-n_test = 100
-batch_size = 32
+n_test = 2
+batch_size = 2
 #batch_size = 8
-epochs = 200
+epochs = 1
 
 if __name__ == '__main__':
 
