@@ -63,6 +63,10 @@ def data_generator(data_dir, mode, scale,
         batch_size=batch_size,
         shuffle=shuffle
     ):
+        print("-----imgs:")
+        print(imgs)
+        pdb.set_trace()
+
         x = np.array([drop_resolution(img, scale) for img in imgs])
         print("----- print x:data_generator")
         print(x)
@@ -86,20 +90,19 @@ if __name__ == '__main__':
         '-ep' + str(epochs) + \
         '-bs' + str(batch_size) + \
         '.h5'
-    print("---------------"+model_filename)
+    print("-----"+model_filename)
     pdb.set_trace()
     data_dir = 'data/'
 
-    train_data_generator = \
-        data_generator(dataset_dir, 'train', scale=4.0,
-                       batch_size=batch_size, shuffle=True)
-    print("train_data_generator")
+    print("-----calling train_data_generator")
+    train_data_generator = data_generator(dataset_dir, 'train', scale=4.0, batch_size=batch_size, shuffle=True)
     print(train_data_generator)
     pdb.set_trace()
 
-    test_x, test_y = \
-        next(data_generator(dataset_dir, 'test', scale=4.0,
-                            batch_size=n_test, shuffle=False))
+    print("-----calling test_data_generator")
+    test_x, test_y = next(data_generator(dataset_dir, 'test', scale=4.0, batch_size=n_test, shuffle=False))
+    print("test_x="+test_x, "test_y="+test_y)
+    pdb.set_trace()
 
     model = Sequential()
 
