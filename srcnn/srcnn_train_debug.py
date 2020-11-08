@@ -17,6 +17,11 @@ def psnr(y_true, y_pred):
 
 def drop_resolution(x, scale):
     # 画像のサイズをいったん縮小したのちに再び拡大することで、低解像度の画像を作る。
+
+    print("----- print x")
+    print(x)
+    pdb.set_trace()
+    
     size = (x.shape[0], x.shape[1])
     print("----- print size:drop_resolution")
     print(size)
@@ -62,7 +67,7 @@ def data_generator(data_dir, mode, scale,
         print("----- print x:data_generator")
         print(x)
         pdb.set_trace()
-        
+
         yield x / 255., imgs / 255.
 
 
