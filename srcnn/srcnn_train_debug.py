@@ -38,6 +38,7 @@ def drop_resolution(x, scale):
     pdb.set_trace()
 
     small_img = img.resize(small_size, 3)
+    #small_img = img.resize(small_size)
     print("----- print drop_resolution:small_img")
     print(small_img)
     pdb.set_trace()
@@ -100,7 +101,11 @@ if __name__ == '__main__':
 
     print("-----calling test_data_generator")
     test_x, test_y = next(data_generator(dataset_dir, 'test', scale=4.0, batch_size=n_test, shuffle=False))
-    print("test_x="+test_x, "test_y="+test_y)
+    print("-----test_x=")
+    print(test_x)
+    print("-----test_y=")
+    print(test_y)
+    
     pdb.set_trace()
 
     model = Sequential()
