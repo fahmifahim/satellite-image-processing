@@ -18,31 +18,31 @@ def psnr(y_true, y_pred):
 def drop_resolution(x, scale):
     # 画像のサイズをいったん縮小したのちに再び拡大することで、低解像度の画像を作る。
 
-    print("----- print x")
+    print("----- print drop_resolution:x")
     print(x)
     pdb.set_trace()
 
     size = (x.shape[0], x.shape[1])
-    print("----- print size:drop_resolution")
+    print("----- print drop_resolution:size")
     print(size)
     pdb.set_trace()
 
     small_size = (int(size[0] / scale), int(size[1] / scale))
-    print("----- print small_size:drop_resolution")
+    print("----- print drop_resolution:small_size")
     print(small_size)
     pdb.set_trace()
 
     img = array_to_img(x)
-    print("----- print img:drop_resolution")
+    print("----- print drop_resolution:img")
     print(img)
     pdb.set_trace()
 
     small_img = img.resize(small_size, 3)
-    print("----- print small_img:drop_resolution")
+    print("----- print drop_resolution:small_img")
     print(small_img)
     pdb.set_trace()
 
-    print("----- print small_img.resize")
+    print("----- print drop_resolution:small_img.resize")
     print(img_to_array(small_img.resize(img.size,3)))
     pdb.set_trace()
 
