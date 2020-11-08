@@ -18,9 +18,29 @@ def psnr(y_true, y_pred):
 def drop_resolution(x, scale):
     # 画像のサイズをいったん縮小したのちに再び拡大することで、低解像度の画像を作る。
     size = (x.shape[0], x.shape[1])
+    print("----- print size:drop_resolution")
+    print(size)
+    pdb.set_trace()
+
     small_size = (int(size[0] / scale), int(size[1] / scale))
+    print("----- print small_size:drop_resolution")
+    print(small_size)
+    pdb.set_trace()
+
     img = array_to_img(x)
+    print("----- print img:drop_resolution")
+    print(img)
+    pdb.set_trace()
+
     small_img = img.resize(small_size, 3)
+    print("----- print small_img:drop_resolution")
+    print(small_img)
+    pdb.set_trace()
+
+    print("----- print small_img.resize")
+    print(img_to_array(small_img.resize(img.size,3)))
+    pdb.set_trace()
+    
     return img_to_array(small_img.resize(img.size, 3))
 
 
@@ -39,6 +59,10 @@ def data_generator(data_dir, mode, scale,
         shuffle=shuffle
     ):
         x = np.array([drop_resolution(img, scale) for img in imgs])
+        print("----- print x:data_generator")
+        print(x)
+        pdb.set_trace()
+        
         yield x / 255., imgs / 255.
 
 
@@ -57,7 +81,7 @@ if __name__ == '__main__':
         '-ep' + str(epochs) + \
         '-bs' + str(batch_size) + \
         '.h5'
-    print(model_filename)
+    print("---------------"+model_filename)
     pdb.set_trace()
     data_dir = 'data/'
 
