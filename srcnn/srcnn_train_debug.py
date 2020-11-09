@@ -18,41 +18,43 @@ def psnr(y_true, y_pred):
 def drop_resolution(x, scale):
     # 画像のサイズをいったん縮小したのちに再び拡大することで、低解像度の画像を作る。
 
-    print("----- print drop_resolution:x")
+    print("----- print drop_resolution:x original coordinate")
     print(x)
-    pdb.set_trace()
+    #pdb.set_trace()
 
     size = (x.shape[0], x.shape[1])
     print("----- print drop_resolution:size")
     print(size)
-    pdb.set_trace()
+    #pdb.set_trace()
 
     small_size = (int(size[0] / scale), int(size[1] / scale))
     print("----- print drop_resolution:small_size")
     print(small_size)
-    pdb.set_trace()
+    #pdb.set_trace()
 
     img = array_to_img(x)
     print("----- print drop_resolution:img")
     print(img)
-    pdb.set_trace()
+    #pdb.set_trace()
 
-    small_img = img.resize(small_size, 3)
-    #small_img = img.resize(small_size)
+    #small_img = img.resize(small_size, 3)
+    small_img = img.resize(small_size)
     print("----- print drop_resolution:small_img")
     print(small_img)
-    pdb.set_trace()
+    #pdb.set_trace()
 
     print("----- print drop_resolution:small_img.resize")
-    print(img_to_array(small_img.resize(img.size,3)))
+    #print(img_to_array(small_img.resize(img.size,3)))
+    print(img_to_array(small_img.resize(img.size)))
     pdb.set_trace()
 
-    return img_to_array(small_img.resize(img.size, 3))
+    #return img_to_array(small_img.resize(img.size, 3))
+    return img_to_array(small_img.resize(img.size))
 
 
 def data_generator(data_dir, mode, scale,
                    target_size=(256, 256),
-                   batch_size=2,
+                   batch_size=1,
                    shuffle=True):
     for imgs in ImageDataGenerator().flow_from_directory(
         directory=data_dir,
@@ -63,12 +65,12 @@ def data_generator(data_dir, mode, scale,
         batch_size=batch_size,
         shuffle=shuffle
     ):
-        print("-----imgs:")
+        print("-----data_generator:imgs")
         print(imgs)
         pdb.set_trace()
 
         x = np.array([drop_resolution(img, scale) for img in imgs])
-        print("----- print x:data_generator")
+        print("----- print data_generator:x")
         print(x)
         pdb.set_trace()
 
@@ -77,10 +79,10 @@ def data_generator(data_dir, mode, scale,
 
 dataset_dir = './Data_ASNARO1_SRCNN/'
 #n_train = 6000
-n_train = 2
+n_train = 1
 #n_test = 616
-n_test = 2
-batch_size = 2
+n_test = 1
+batch_size = 1
 #batch_size = 8
 epochs = 1
 
