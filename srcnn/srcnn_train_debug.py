@@ -121,12 +121,14 @@ if __name__ == '__main__':
 
     model.summary()
 
+#https://keras.io/api/models/model_training_apis/
     model.compile(
         loss='mean_squared_error',
         optimizer='adam',
         metrics=[psnr]
     )
 
+#https://keras.io/api/models/model_training_apis/
     model.fit(train_data_generator,
               epochs=epochs,
               validation_data=(test_x, test_y),
