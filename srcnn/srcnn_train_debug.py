@@ -20,32 +20,25 @@ def drop_resolution(x, scale):
 
     print("----- print drop_resolution:x original coordinate")
     print(x)
-    #pdb.set_trace()
 
     size = (x.shape[0], x.shape[1])
     print("----- print drop_resolution:size")
     print(size)
-    #pdb.set_trace()
 
     small_size = (int(size[0] / scale), int(size[1] / scale))
     print("----- print drop_resolution:small_size")
     print(small_size)
-    #pdb.set_trace()
 
     img = array_to_img(x)
     print("----- print drop_resolution:img")
     print(img)
-    #pdb.set_trace()
 
-    #small_img = img.resize(small_size, 3)
-    small_img = img.resize(small_size)
+    small_img = img.resize(small_size, resample=Image.BICUBIC)
     print("----- print drop_resolution:small_img")
     print(small_img)
-    #pdb.set_trace()
 
     print("----- print drop_resolution:small_img.resize")
-    #print(img_to_array(small_img.resize(img.size,3)))
-    print(img_to_array(small_img.resize(img.size)))
+    print(img_to_array(small_img.resize(img.size, resample=Image.BICUBIC)))
     pdb.set_trace()
 
     #return img_to_array(small_img.resize(img.size, 3))
