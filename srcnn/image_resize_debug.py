@@ -29,7 +29,7 @@ im_resize128_array = img_to_array(im_resize128_sequence)
 print("--Array2")
 print(im_resize128_array)
 
-im_reproduce256 = im_resize128.resize(im_resize128.size, resample=Image.BICUBIC)
+im_reproduce256 = im_resize128.resize(im2.size, resample=Image.BICUBIC)
 print(im_reproduce256)
 im_reproduce256_sequence = im_reproduce256.getdata()
 im_reproduce256_array = img_to_array(im_reproduce256_sequence)
