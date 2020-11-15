@@ -35,21 +35,22 @@ def drop_resolution(x, scale):
     img = array_to_img(x)
     print("----- print drop_resolution:img")
     print(img)
+    print(img_to_array(img))
     #pdb.set_trace()
 
-    #small_img = img.resize(small_size, 3)
-    small_img = img.resize(small_size)
+    small_img = img.resize(small_size, 3)
     print("----- print drop_resolution:small_img")
     print(small_img)
+    print(img_to_array(small_img))
     #pdb.set_trace()
 
-    print("----- print drop_resolution:small_img.resize")
-    #print(img_to_array(small_img.resize(img.size,3)))
-    print(img_to_array(small_img.resize(img.size)))
+    print("----- print drop_resolution:reproduce_img")
+    reproduce_img = small_img.resize(img.size, 3)
+    print(reproduce_img)
+    print(img_to_array(reproduce_img))
     pdb.set_trace()
 
-    #return img_to_array(small_img.resize(img.size, 3))
-    return img_to_array(small_img.resize(img.size))
+    return img_to_array(reproduce_img)
 
 
 def data_generator(data_dir, mode, scale,
