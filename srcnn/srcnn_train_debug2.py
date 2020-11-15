@@ -18,38 +18,28 @@ def psnr(y_true, y_pred):
 def drop_resolution(x, scale):
     # 画像のサイズをいったん縮小したのちに再び拡大することで、低解像度の画像を作る。
 
-    print("----- print drop_resolution:x original coordinate")
+    print("----- ORIGINAL input array")
     print(x)
-    #pdb.set_trace()
 
     size = (x.shape[0], x.shape[1])
-    print("----- print drop_resolution:size")
-    print(size)
-    #pdb.set_trace()
-
     small_size = (int(size[0] / scale), int(size[1] / scale))
-    print("----- print drop_resolution:small_size")
-    print(small_size)
-    #pdb.set_trace()
 
     img = array_to_img(x)
-    print("----- print drop_resolution:img")
+    print("----- ORIGINAL img object and array")
     print(img)
     print(img_to_array(img))
-    #pdb.set_trace()
 
     small_img = img.resize(small_size, 3)
-    print("----- print drop_resolution:small_img")
+    print("----- RESIZE small_img object and array")
     print(small_img)
     print(img_to_array(small_img))
-    #pdb.set_trace()
 
-    print("----- print drop_resolution:reproduce_img")
+    print("----- REPRODUCE ORIGINAL reproduce_img object and array")
     reproduce_img = small_img.resize(img.size, 3)
     print(reproduce_img)
     print(img_to_array(reproduce_img))
+    
     pdb.set_trace()
-
     return img_to_array(reproduce_img)
 
 
@@ -98,12 +88,14 @@ if __name__ == '__main__':
     data_dir = 'data/'
 
     print("-----calling train_data_generator")
-    train_data_generator = data_generator(dataset_dir, 'train', scale=4.0, batch_size=batch_size, shuffle=True)
+    #train_data_generator = data_generator(dataset_dir, 'train', scale=4.0, batch_size=batch_size, shuffle=True)
+    train_data_generator = data_generator(dataset_dir, 'train', scale=1.0, batch_size=batch_size, shuffle=True)
     print(train_data_generator)
     pdb.set_trace()
 
     print("-----calling test_data_generator")
-    test_x, test_y = next(data_generator(dataset_dir, 'test', scale=4.0, batch_size=n_test, shuffle=False))
+    #test_x, test_y = next(data_generator(dataset_dir, 'test', scale=4.0, batch_size=n_test, shuffle=False))
+    test_x, test_y = next(data_generator(dataset_dir, 'test', scale=1.0, batch_size=n_test, shuffle=False))
     print("-----test_x=")
     print(test_x)
     print("-----test_y=")
