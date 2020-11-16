@@ -37,7 +37,7 @@ print(im2_resize64)
 
 #img_im2_rescale64 = array_to_img(im2_rescale64)
 img_im2_rescale64 = np.array(im2_resize64, dtype=np.uint8)
-imsave("test.png", img_im2_rescale64)
+imsave("output_z18_103230_232831-resized64.png", img_im2_rescale64)
 print("\nimg_im2_rescale64:")
 print(img_im2_rescale64)
 print(array_to_img(img_im2_rescale64))
