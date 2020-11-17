@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 from skimage.transform import resize, rescale, downscale_local_mean
 from skimage.io import imsave, imread
-from keras.preprocessing.image import img_to_array, load_img, array_to_img
+from keras.preprocessing.image import img_to_array, load_img, array_to_img, save_img
 
 im_path = 'Data_ASNARO1_SRCNN/train/output_z18_103230_232831.png'
 im1 = Image.open(im_path)
@@ -30,10 +30,14 @@ print(im2)
 im2_sequence = im2.getdata()
 im2_array = img_to_array(im2_sequence)
 print(im2_array)
+save_img('output_z18_103230_232831-original256-keras1.png', im2_array)
+
 
 img_im2 = im2.resize(size=(64,64), resample=Image.BICUBIC)
 print(img_im2)
-imsave("output_z18_103230_232831-resized64-keras1.png", img_im2)
+img2_array = img_to_array(img_im2)
+# save the image with a new filename
+save_img('output_z18_103230_232831-resized64-keras2.png', img2_array)
 
 
 print("\nRESIZE ARRAY to 64")
