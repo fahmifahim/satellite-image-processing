@@ -55,7 +55,7 @@ n_train = 2000
 n_test = 100
 batch_size = 32
 #batch_size = 8
-epochs = 100
+epochs = 50
 
 if __name__ == '__main__':
 
@@ -64,15 +64,15 @@ if __name__ == '__main__':
         '-bs' + str(batch_size) + \
         '.h5'
     print(model_filename)
-    pdb.set_trace()
+    #pdb.set_trace()
     data_dir = 'data/'
 
     train_data_generator = \
         data_generator(dataset_dir, 'train', scale=4.0,
                        batch_size=batch_size, shuffle=True)
-    print("train_data_generator")
-    print(train_data_generator)
-    pdb.set_trace()
+    #print("train_data_generator")
+    #print(train_data_generator)
+    #pdb.set_trace()
 
     test_x, test_y = \
         next(data_generator(dataset_dir, 'test', scale=4.0,
