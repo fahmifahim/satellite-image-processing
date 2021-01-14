@@ -14,11 +14,12 @@ if True:
 if __name__ == '__main__':
 
     #N_show = 319  # N_show番目の評価用データを表示
-    N_show = 1  # N_show番目の評価用データを表示
+    N_show = 2  # N_show番目の評価用データを表示
 
     model_filename = 'srcnn_asnaro1_train' + \
         '-ep' + str(epochs) + \
         '-bs' + str(batch_size)
+    print("---Model FILENAME = ", model_filename)
     path_to_model = './data/' + model_filename + '.h5'
     result_dir = 'rslt/'
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     timestr = time.strftime("%Y%m%d-%H%M%S")
 
     test_x, test_y = \
-        next(data_generator(dataset_dir, 'test', scale=4.0,
+        next(data_generator(dataset_dir, 'test', scale=1.0,
                             batch_size=n_test, shuffle=False))
 
     # Reload a pretrained Keras model from the saved model:
@@ -41,7 +42,9 @@ if __name__ == '__main__':
     model.summary()
 
     # Do the prediction
-    pred = model.predict(test_x)
+    print("---START PREDICTION---")
+#    pred = model.predict(test_x)
+    pred = model.predict(test_x, verbose=1)
 
     fig = plt.figure(figsize=(50, 50), facecolor="w")
 
