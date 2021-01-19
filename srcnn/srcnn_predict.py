@@ -55,9 +55,9 @@ if __name__ == '__main__':
     print(pred)
 
     # Calculate PSNR between ORIGINAL and PREDICTION
-    psnr_value = psnr(test_y, pred)
     print("--PSNR--")
-    print(psnr_value)
+    psnr_array = K.get_value(psnr(test_y, pred))
+    print(psnr_array)
 
     fig = plt.figure(figsize=(50, 50), facecolor="w")
 
