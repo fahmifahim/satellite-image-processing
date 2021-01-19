@@ -3,6 +3,7 @@ import os
 import time
 import matplotlib.pyplot as plt
 import matplotlib
+from keras import backend as K
 matplotlib.use('Agg')
 
 if True:
