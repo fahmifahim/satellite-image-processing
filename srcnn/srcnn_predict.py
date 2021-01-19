@@ -32,6 +32,12 @@ if __name__ == '__main__':
         next(data_generator(dataset_dir, 'test', scale=4.0,
                             batch_size=n_test, shuffle=False))
 
+    # Print ORIGINAL and LOW RESOLUTION
+    print("--ORIGINAL--")
+    print(test_y)
+    print("--LOW RESOLUTION--")
+    print(test_x)
+
     # Reload a pretrained Keras model from the saved model:
     # model = keras.models.load_model(path_to_model, custom_objects=[psnr])
     model = keras.models.load_model(path_to_model,
@@ -42,6 +48,15 @@ if __name__ == '__main__':
 
     # Do the prediction
     pred = model.predict(test_x)
+    
+    # Print PREDICTION 
+    print("--PREDICTION--")
+    print(pred)
+
+    # Calculate PSNR between ORIGINAL and PREDICTION
+    psnr_value = psnr(test_y, pred)
+    print("--PSNR--")
+    print(psnr_value)
 
     fig = plt.figure(figsize=(50, 50), facecolor="w")
 
