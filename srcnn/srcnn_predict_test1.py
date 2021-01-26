@@ -31,14 +31,14 @@ if __name__ == '__main__':
     timestr = time.strftime("%Y%m%d-%H%M%S")
 
     test_x, test_y = \
-        next(data_generator(dataset_dir, 'test', scale=1.0,
-                            batch_size=n_test, shuffle=False))
+            next(data_generator(dataset_dir, 'test', scale=4.0,
+                                batch_size=n_test, shuffle=False))
 
     # Print ORIGINAL and LOW RESOLUTION
-    print("--ORIGINAL--")
-    print(test_y)
-    print("--LOW RESOLUTION--")
-    print(test_x)
+    #print("--ORIGINAL--")
+    #print(test_y)
+    #print("--LOW RESOLUTION--")
+    #print(test_x)
 
     # Reload a pretrained Keras model from the saved model:
     # model = keras.models.load_model(path_to_model, custom_objects=[psnr])
@@ -47,36 +47,38 @@ if __name__ == '__main__':
 
     # Check its architecture
     model.summary()
-
-    # Do the prediction
-    pred = model.predict(test_x)
     
     # Print PREDICTION 
-    print("--PREDICTION--")
-    print(pred)
+    #print("--PREDICTION--")
+    #print(pred)
 
     # Calculate PSNR between ORIGINAL and PREDICTION
     print("--PSNR--")
-    psnr_array = K.get_value(psnr(test_y, pred))
-    print(psnr_array)
+    for i in range(len(test_y)):
+        # Do the prediction
+        pred[i] = model.predict(test_x[i])
 
-    fig = plt.figure(figsize=(50, 50), facecolor="w")
+        psnr_array = K.get_value(psnr(test_y[i], pred[i]))
+        print(psnr_array)
 
-    plt.subplot(1, 3, 1)
-    plt.title("Original", fontsize=80)
-    plt.tight_layout()
-    plt.imshow(test_y[N_show, :, :])
+        fig = plt.figure(figsize=(50, 50), facecolor="w")
 
-    plt.subplot(1, 3, 2)
-    plt.title("Low resolution", fontsize=80)
-    plt.tight_layout()
-    plt.imshow(test_x[N_show, :, :])
+        plt.subplot(1, 3, 1)
+        plt.title("Original", fontsize=80)
+        plt.tight_layout()
+        plt.imshow(test_y[N_show, :, :])
 
-    plt.subplot(1, 3, 3)
-    plt.title("SRCNN result", fontsize=80)
-    plt.tight_layout()
-    plt.imshow(pred[N_show, :, :])
+        plt.subplot(1, 3, 2)
+        plt.title("Low resolution", fontsize=80)
+        plt.tight_layout()
+        plt.imshow(test_x[N_show, :, :])
 
-    print('Saving SRCNN result image...')
-    plt.savefig(result_dir + model_filename +
-                '-' + str(N_show) + '-' + timestr + '.png')
+        plt.subplot(1, 3, 3)
+        plt.title("SRCNN result", fontsize=80)
+        plt.tight_layout()
+        plt.imshow(pred[N_show, :, :])
+
+        print('Saving SRCNN result image...')
+        plt.savefig(result_dir + model_filename +
+                    '-' + str(N_show) + '-' + timestr + '.png')
+    }
