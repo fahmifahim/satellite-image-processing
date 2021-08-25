@@ -1,4 +1,4 @@
 keras==2.2.5
-tensorflow-gpu==1.6.0
+tensorflow-gpu==2.5.1
 Image==1.5.32
 matplotlib==3.0.3
